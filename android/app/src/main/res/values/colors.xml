@@ -1,0 +1,5 @@
+<resources>
+    <!-- Deep barn brown: the pre-RN launch window matches LoaderScreen's top
+         gradient stop so the first captured frame is branded, never white. -->
+    <color name="splashBackground">#2B1E14</color>
+</resources>

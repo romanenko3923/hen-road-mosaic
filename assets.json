@@ -1,0 +1,34 @@
+{
+  "assets": [
+    {
+      "name": "icon_1024",
+      "type": "icon",
+      "prompt": "App icon, ONE single glossy 3D rounded square mosaic tile tilted eighteen degrees, its face split diagonally into warm sunset gold and field green, centered on a cream to gold radial gradient background, soft contact shadow, crisp, no text, no scene, no other objects"
+    },
+    {
+      "name": "bg_loader",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game loader background, dark walnut barn wood plank texture, deep brown, faint warm sunset glow at the bottom edge, heavy vignette, cinematic, no text, no UI elements"
+    },
+    {
+      "name": "bg_menu",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game menu background, warm farm sunset landscape, golden sky, rolling green fields, a dirt road, stylised 3D render, vibrant, bright, no text, no UI elements"
+    },
+    {
+      "name": "bg_game",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game background, very soft blurred cream and gold farm sunset, very low contrast, flat even lighting for UI overlay, no text, no UI elements"
+    },
+    {
+      "name": "bg_result",
+      "type": "bg",
+      "prompt": "Vertical 9:16 mobile game results background, warm gold to terracotta gradient with a soft radial glow and faint wheat field silhouette, no text, no UI elements"
+    },
+    {
+      "name": "sprite_hen",
+      "type": "sprite",
+      "prompt": "One single cute cartoon hen, centered icon, glossy 3D render, warm cream and terracotta, isolated on plain white, no other objects"
+    }
+  ]
+}
