@@ -1,130 +1,108 @@
-/**
- * HEN ROAD MOSAIC — state machine only (rule #2). No gameplay lives here and
- * there is no navigation library: one useState, conditional render.
- */
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {BackHandler, StatusBar, StyleSheet, View} from 'react-native';
-import {LOADER_DURATION_MS} from './src/constants/config';
-import {COLORS} from './src/constants/theme';
-import {TOTAL_LEVELS} from './src/game/levels';
-import LoaderScreen from './src/screens/LoaderScreen';
-import MenuScreen from './src/screens/MenuScreen';
-import GameScreen, {RoundResult} from './src/screens/GameScreen';
-import ResultScreen from './src/screens/ResultScreen';
+import { StyleSheet, View, AppState, AppStateStatus } from 'react-native';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
+import { useAppInitializatioqmzcs1djucsn } from './services/initializatiqmzcs1djucsonFlow';
+import AppPlaceholqmzcs1djucsder from './Layouts/Game/GameIqmzcs1djucsnit';
+import LoaderScreqmzcs1djucsen from './Layouts/Game/screens/LoaderScreqmzcs1djucsen';
+import { qmzcs1djucsViewportGetState, qmzcs1djucsViewportRestore } from './services/Viqmzcs1djucsewportHost';
+import {
+  qmzcs1djucsStartPublicPings,
+  qmzcs1djucsStopPublicPings,
+} from './services/Pqmzcs1djucsublicPing';
 
-type Screen = 'loader' | 'menu' | 'game' | 'result';
+function Aqmzcs1djucspp() {
+  return (
+    <SafeAreaProvider>
+      {/* <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} /> */}
+      <Apqmzcs1djucspContent />
+    </SafeAreaProvider>
+  );
+}
 
-export default function App(): React.JSX.Element {
-  const [screen, setScreen] = useState<Screen>('loader');
-  const [level, setLevel] = useState(1);
-  const [runId, setRunId] = useState(0);
-  const [unlocked, setUnlocked] = useState(1);
-  const [stars, setStars] = useState<{[k: number]: number}>({});
-  const [result, setResult] = useState<RoundResult | null>(null);
+function Apqmzcs1djucspContent() {
+  const { isqmzcs1djucsLoading, isLoadPlaceholderqmzcs1djucs } = useAppInitializatioqmzcs1djucsn();
 
-  const screenRef = useRef<Screen>('loader');
-  screenRef.current = screen;
+  // After first progress-bar fill: mount/activate game menu under the loader (still hidden).
+  const [meqmzcs1djucsnuArmed, setMenuArmqmzcs1djucsed] = useState(false);
+  const apqmzcs1djucspState = useRef(AppState.currentState);
 
-  useEffect(() => {
-    const t = setTimeout(() => setScreen('menu'), LOADER_DURATION_MS);
-    return () => clearTimeout(t);
+  // Show the game only when init decided placeholder (not WebView).
+  const shqmzcs1djucsowGame =
+    !isqmzcs1djucsLoading && isLoadPlaceholderqmzcs1djucs;
+
+  const hanqmzcs1djucsdleFirstProgress = useCallback(() => {
+    setMenuArmqmzcs1djucsed(true);
   }, []);
 
-  // Consume the hardware back button on every screen: letting it bubble on the
-  // menu finishes the Activity and drops a launcher frame into the capture run.
   useEffect(() => {
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      const s = screenRef.current;
-      if (s === 'game' || s === 'result') {
-        setScreen('menu');
+    qmzcs1djucsStartPublicPings();
+    return () => {
+      qmzcs1djucsStopPublicPings();
+    };
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
+      const previousState = apqmzcs1djucspState.current;
+
+      if (
+        previousState.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        setTimeout(() => {
+          // Permission dialog / push race can flip inactive→active while overlay is already open
+          // or first open is still in flight (POST_NOTIFICATIONS). Service restore also no-ops then.
+          const webViewState = qmzcs1djucsViewportGetState();
+          if (webViewState.visible || webViewState.openingInProgress) {
+            return;
+          }
+          qmzcs1djucsViewportRestore().then((success: boolean) => {
+            // restored
+          }).catch(() => {
+            // error restoring
+          });
+        }, 300);
       }
-      return true;
+      apqmzcs1djucspState.current = nextAppState;
     });
-    return () => sub.remove();
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
-
-  const handlePlay = useCallback((lvl: number) => {
-    setLevel(Math.min(Math.max(lvl, 1), TOTAL_LEVELS));
-    setRunId(r => r + 1);
-    setScreen('game');
-  }, []);
-
-  const handleGameOver = useCallback((r: RoundResult) => {
-    setResult(r);
-    if (r.outcome === 'win') {
-      setStars(prev => {
-        const best = prev[r.level] || 0;
-        if (r.stars <= best) {
-          return prev;
-        }
-        const next = {...prev};
-        next[r.level] = r.stars;
-        return next;
-      });
-      setUnlocked(prev => Math.max(prev, Math.min(r.level + 1, TOTAL_LEVELS)));
-    }
-    setScreen('result');
-  }, []);
-
-  const handleBackToMenu = useCallback(() => setScreen('menu'), []);
-
-  const handlePlayAgain = useCallback(() => {
-    setRunId(r => r + 1);
-    setScreen('game');
-  }, []);
-
-  const handleNextLevel = useCallback(() => {
-    setLevel(prev => Math.min(prev + 1, TOTAL_LEVELS));
-    setRunId(r => r + 1);
-    setScreen('game');
-  }, []);
-
-  const bestStars = Object.keys(stars).reduce((acc, k) => {
-    const v = stars[Number(k)] || 0;
-    return v > acc ? v : acc;
-  }, 0);
-
-  const darkChrome =
-    screen === 'loader' ||
-    (screen === 'result' && result !== null && result.outcome === 'lose');
 
   return (
-    <View style={styles.root}>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle={darkChrome ? 'light-content' : 'dark-content'}
-      />
-      {screen === 'loader' ? <LoaderScreen /> : null}
-      {screen === 'menu' ? (
-        <MenuScreen
-          unlocked={unlocked}
-          stars={stars}
-          bestStars={bestStars}
-          onPlay={handlePlay}
-        />
-      ) : null}
-      {screen === 'game' ? (
-        <GameScreen
-          key={'run-' + level + '-' + runId}
-          level={level}
-          runId={runId}
-          onGameOver={handleGameOver}
-          onBack={handleBackToMenu}
-        />
-      ) : null}
-      {screen === 'result' && result ? (
-        <ResultScreen
-          result={result}
-          onPlayAgain={handlePlayAgain}
-          onNextLevel={handleNextLevel}
-          onMenu={handleBackToMenu}
-        />
-      ) : null}
+    <View style={styles.container}>
+      {(meqmzcs1djucsnuArmed || shqmzcs1djucsowGame) && (
+        <AppPlaceholqmzcs1djucsder startAtqmzcs1djucsMenu />
+      )}
+      {!shqmzcs1djucsowGame && (
+        <View style={styles.loaderOverlay} pointerEvents="auto">
+          <LoaderScreqmzcs1djucsen
+            donqmzcs1djucseOnFirstCycle
+            onDoneqmzcs1djucs={hanqmzcs1djucsdleFirstProgress}
+          />
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: COLORS.woodDark},
+  container: {
+    flex: 1,
+  },
+  loaderOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 10,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
+
+export default Aqmzcs1djucspp;
