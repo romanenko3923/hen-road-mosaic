@@ -113,8 +113,9 @@ async function main() {
     meta.readyBuildsDir || DEFAULT_READY_BUILDS
   );
 
-  // versionCode берём из build.gradle — как кнопка «Создать название» в Helper
-  const named = await resolveBuildName(rootPath, meta.versionCode, meta);
+  // versionCode только из build.gradle — как «Создать название» и AAB с GitHub.
+  // meta.versionCode не передаём: он остаётся от первой заливки и даёт «1залив».
+  const named = await resolveBuildName(rootPath);
   if (!named.ok) {
     throw new Error(`${named.title}: ${named.details}`);
   }
