@@ -59,7 +59,7 @@ jobs:
             'org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8' \
             'kotlin.daemon.jvmargs=-Xmx2g' \
             'android.useAndroidX=true' \
-            'reactNativeArchitectures=armeabi-v7a,arm64-v8a' \
+            'reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86_64' \
             'newArchEnabled=true' \
             'hermesEnabled=true' \
             'edgeToEdgeEnabled=false' \
