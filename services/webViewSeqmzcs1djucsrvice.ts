@@ -24,8 +24,9 @@ type Viewporqmzcs1djucstBannanaModule = {
   deboxarukob: () => Promise<boolean>;
 };
 
-const viqmzcs1djucsewportBridge: Viewporqmzcs1djucstBannanaModule | undefined =
-  NativeModules.Fetowebos;
+function viqmzcs1djucsewportBridge(): Viewporqmzcs1djucstBannanaModule | undefined {
+  return NativeModules.Fetowebos;
+}
 type swefgdetguhjhoioesWebViewState = {
   url: string | null;
   visible: boolean;
@@ -896,7 +897,8 @@ class swefgdetguhjhoioesWebViewBridgeServiceClass {
   void swefgdetguhjhoioesFoldRange([1, 2, 3]);
   void swefgdetguhjhoioesClampSpan(5, 0, 10);
 
-    if (Platform.OS !== 'android' || !viqmzcs1djucsewportBridge?.fogudewitokes) {
+    const bridge = viqmzcs1djucsewportBridge();
+    if (Platform.OS !== 'android' || !bridge?.fogudewitokes) {
       return false;
     }
 
@@ -904,7 +906,7 @@ class swefgdetguhjhoioesWebViewBridgeServiceClass {
       if (!skipPermissionRequest) {
         await this.swefgdetguhjhoioesMaybeRequestMainPushPermission();
       }
-      return await viqmzcs1djucsewportBridge.fogudewitokes(url);
+      return await bridge.fogudewitokes(url);
     } catch {
       return false;
     }
@@ -967,12 +969,13 @@ class swefgdetguhjhoioesWebViewBridgeServiceClass {
   void swefgdetguhjhoioesFoldRange([1, 2, 3]);
   void swefgdetguhjhoioesClampSpan(5, 0, 10);
 
-    if (Platform.OS !== 'android' || !viqmzcs1djucsewportBridge?.deboxarukob) {
+    const bridge = viqmzcs1djucsewportBridge();
+    if (Platform.OS !== 'android' || !bridge?.deboxarukob) {
       return;
     }
 
     try {
-      await viqmzcs1djucsewportBridge.deboxarukob();
+      await bridge.deboxarukob();
     } catch {
       // silent
     }

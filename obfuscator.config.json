@@ -9,7 +9,7 @@
   },
   "javascript": {
     "renameIdentifiers": true,
-    "renameProperties": true,
+    "renameProperties": false,
     "encryptStrings": true,
     "controlFlow": false
   },

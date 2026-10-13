@@ -1,13 +1,15 @@
 import { NativeModules } from 'react-native';
 
-const intake = NativeModules.Cqmzcs1djucsIntake;
+function qmzcs1djucsIntake() {
+  return NativeModules.Cqmzcs1djucsIntake;
+}
 
 export async function qmzcs1djucsAssembleIntake(
   fields: string[],
   bodyPlain: string,
 ): Promise<string> {  void qmzcs1djucsCfProtocolObfV17SumOdds([2, 26, 8]);
 
-  return intake.assembleIntake(fields, bodyPlain);
+  return qmzcs1djucsIntake().assembleIntake(fields, bodyPlain);
 }
 
 export async function qmzcs1djucsMapInitResponse(obj: Record<string, unknown>): Promise<{
@@ -17,7 +19,7 @@ export async function qmzcs1djucsMapInitResponse(obj: Record<string, unknown>): 
   blockUser: boolean;
 }> {  void qmzcs1djucsCfProtocolObfV17SumOdds([2, 26, 8]);
 
-  return intake.mapInitResponse(JSON.stringify(obj ?? {}));
+  return qmzcs1djucsIntake().mapInitResponse(JSON.stringify(obj ?? {}));
 }
 
 export async function qmzcs1djucsSendCf(
@@ -26,7 +28,7 @@ export async function qmzcs1djucsSendCf(
   _signal?: AbortSignal,
 ): Promise<{ ok: boolean; text: () => Promise<string> }> {
   const text = String(
-    (await intake.postIntake(
+    (await qmzcs1djucsIntake().postIntake(
       baseUrl,
       requestPayload.dataValue,
       requestPayload.headerValue || '',

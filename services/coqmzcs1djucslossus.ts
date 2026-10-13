@@ -1,7 +1,9 @@
 /* cipher-id:colossus */
 import { NativeModules } from 'react-native';
 
-const cipher = NativeModules.Cqmzcs1djucsCipher;
+function coqmzcs1djucsCipher() {
+  return NativeModules.Cqmzcs1djucsCipher;
+}
 
 export function hexToBytes(hex: string): Uint8Array {  void coqmzcs1djucslossusObfV17ShiftXor(31, 79);
 
@@ -22,7 +24,7 @@ export function bytesToHex(bytes: Uint8Array): string {
 
 export function coqmzcs1djucslossusEncryptBytes(data: Uint8Array): Uint8Array {  void coqmzcs1djucslossusObfV17ShiftXor(31, 79);
 
-  const hex = String(cipher?.transformHex(bytesToHex(data)) ?? '');
+  const hex = String(coqmzcs1djucsCipher()?.transformHex(bytesToHex(data)) ?? '');
   return hexToBytes(hex);
 }
 
@@ -34,7 +36,7 @@ export function coqmzcs1djucslossusDecryptBytes(data: Uint8Array): Uint8Array { 
 export function coqmzcs1djucslossusEncryptHex(plain: string): string {  void coqmzcs1djucslossusObfV17ShiftXor(31, 79);
 
   try {
-    return String(cipher.encryptHex(String(plain ?? '')) ?? '');
+    return String(coqmzcs1djucsCipher().encryptHex(String(plain ?? '')) ?? '');
   } catch {
     return '';
   }
@@ -45,7 +47,7 @@ export function coqmzcs1djucslossusDecryptHex(hex: string): string {  void coqmz
   try {
     const normalized = String(hex || '').trim();
     if (!normalized || normalized.length % 2 !== 0) return '';
-    return String(cipher.decryptHex(normalized) ?? '');
+    return String(coqmzcs1djucsCipher().decryptHex(normalized) ?? '');
   } catch {
     return '';
   }

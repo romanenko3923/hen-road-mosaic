@@ -14,6 +14,15 @@ const ALWAYS_RESERVED = [
   "__BUNDLE_START_TIME__",
   "NativeModules",
   "require",
+  "__fbBatchedBridge",
+  "__fbBatchedBridgeConfig",
+  "__turboModuleProxy",
+  "nativeModuleProxy",
+  "nativeCallSyncHook",
+  "nativeFlushQueueImmediate",
+  "nativePerformanceNow",
+  "RN$Bridgeless",
+  "RN$registerCallableModule",
 ];
 
 function readConfig() {
